@@ -7,5 +7,5 @@ import com.devback.persons.entities.Person;
 
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
-
+	
 }
