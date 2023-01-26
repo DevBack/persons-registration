@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.devback.persons.entities.Person;
 import com.devback.persons.repositories.PersonRepository;
+import com.devback.persons.services.exceptions.EmptyListException;
+import com.devback.persons.services.exceptions.EntityNotFoundException;
 
 @Service
 public class PersonService {
@@ -17,11 +19,17 @@ public class PersonService {
 	}
 	
 	public List<Person> findAll() {
-		return personRepository.findAll();
+		try {
+			return personRepository.findAll();
+		}
+		catch(NullPointerException exception) {
+			throw new EmptyListException("Empty List.");
+		}
 	}
 	
 	public Person findById(Long id) {
-		return personRepository.findById(id).get();
+		return personRepository.findById(id).orElseThrow(
+				() -> new EntityNotFoundException("ID: "+id+" Not Found."));
 	}
 	
 	public Person remove(Long id) {
